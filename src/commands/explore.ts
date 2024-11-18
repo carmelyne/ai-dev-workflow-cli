@@ -1,3 +1,23 @@
+/**
+ * Project Exploration Command
+ * 
+ * Helps developers understand and navigate the project structure and codebase.
+ * Provides insights about code organization, dependencies, and relationships
+ * between different components.
+ * 
+ * Features:
+ * - Project structure analysis
+ * - Pattern-based file search
+ * - Code dependency mapping
+ * - Component relationship insights
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev explore
+ * ai-dev explore --pattern "*.ts"
+ * ```
+ */
+
 import { createExplorer } from '../explorer.js';
 
 interface ExploreOptions {

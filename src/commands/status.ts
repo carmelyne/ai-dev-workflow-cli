@@ -1,3 +1,25 @@
+/**
+ * Status Tracking Command
+ * 
+ * Monitors and displays the current development context, active tasks,
+ * and project status. Provides a comprehensive view of the development
+ * state and pending actions.
+ * 
+ * Features:
+ * - Current context display
+ * - Active task listing
+ * - Recent activity tracking
+ * - Pending action highlights
+ * - Git integration
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev status
+ * ai-dev status --detailed
+ * ai-dev status --watch
+ * ```
+ */
+
 import { Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';

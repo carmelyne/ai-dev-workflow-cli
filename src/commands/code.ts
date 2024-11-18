@@ -1,3 +1,25 @@
+/**
+ * Code Generation Command
+ * 
+ * Provides AI-assisted code generation and modification capabilities.
+ * Helps developers write, modify, and improve code through AI
+ * guidance and suggestions.
+ * 
+ * Features:
+ * - Code generation
+ * - Code modification
+ * - Style enforcement
+ * - Best practice suggestions
+ * - Documentation generation
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev code generate
+ * ai-dev code modify
+ * ai-dev code document
+ * ```
+ */
+
 import { Command } from 'commander';
 import { CodeReviewCommand } from './code/review.js';
 import { runTests } from '../utils/test.js';

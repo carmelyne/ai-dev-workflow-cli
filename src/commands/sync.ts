@@ -1,3 +1,25 @@
+/**
+ * Synchronization Command
+ * 
+ * Manages synchronization of development state and context across
+ * different environments and team members. Ensures consistency
+ * in development workflow.
+ * 
+ * Features:
+ * - State synchronization
+ * - Context sharing
+ * - Environment alignment
+ * - Team coordination
+ * - Configuration sync
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev sync
+ * ai-dev sync push
+ * ai-dev sync pull
+ * ```
+ */
+
 import { Command } from 'commander';
 import { syncConfigWithTemplate } from '../utils/config.js';
 import chalk from 'chalk';

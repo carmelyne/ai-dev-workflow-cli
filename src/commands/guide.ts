@@ -1,3 +1,27 @@
+/**
+ * AI Guidance Command
+ * 
+ * Provides AI-assisted guidance for development tasks. Analyzes current context
+ * and project state to offer relevant suggestions and step-by-step guidance
+ * for various development activities.
+ * 
+ * Features:
+ * - Interactive AI guidance
+ * - Context-aware suggestions
+ * - Support for different development tasks:
+ *   - Feature development
+ *   - Bug fixing
+ *   - Refactoring
+ * - Conversation history tracking
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev guide
+ * ai-dev guide feature
+ * ai-dev guide bugfix --interactive
+ * ```
+ */
+
 import fs from 'fs';
 import path from 'path';
 import yaml from 'yaml';

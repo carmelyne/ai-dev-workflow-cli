@@ -1,3 +1,23 @@
+/**
+ * Project Initialization Command
+ * 
+ * Initializes a new project with AI-guided development workflow configuration.
+ * Creates necessary directory structure, configuration files, and templates
+ * for AI-assisted development.
+ * 
+ * Features:
+ * - Creates .ai directory with configuration
+ * - Sets up project-specific templates
+ * - Configures initial development workflow
+ * - Initializes git integration (if needed)
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev init
+ * ai-dev init --type webapp
+ * ```
+ */
+
 import fs from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';

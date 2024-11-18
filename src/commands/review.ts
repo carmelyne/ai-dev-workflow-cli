@@ -1,3 +1,25 @@
+/**
+ * Code Review Command
+ * 
+ * Provides AI-assisted code review functionality. Analyzes code changes,
+ * provides feedback, and suggests improvements based on best practices
+ * and project-specific guidelines.
+ * 
+ * Features:
+ * - Automated code analysis
+ * - Best practice checking
+ * - Performance consideration
+ * - Security review
+ * - Style guide compliance
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev review
+ * ai-dev review --diff
+ * ai-dev review --full
+ * ```
+ */
+
 import { Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';

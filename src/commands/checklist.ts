@@ -1,3 +1,25 @@
+/**
+ * Checklist Management Command
+ * 
+ * Manages development checklists and task verification. Helps ensure
+ * consistency and completeness in development tasks through
+ * structured checklists.
+ * 
+ * Features:
+ * - Checklist creation
+ * - Progress tracking
+ * - Task verification
+ * - Template management
+ * - Custom checklist support
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev checklist
+ * ai-dev checklist create
+ * ai-dev checklist verify
+ * ```
+ */
+
 import { Command } from 'commander';
 import * as fs from 'fs';
 import * as path from 'path';

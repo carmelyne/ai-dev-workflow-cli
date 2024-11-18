@@ -1,3 +1,25 @@
+/**
+ * Context Following Command
+ * 
+ * Maintains and manages development contexts. Enables smooth context
+ * switching while preserving important state and related information
+ * for different development tasks.
+ * 
+ * Features:
+ * - Context state preservation
+ * - Smart context switching
+ * - History tracking
+ * - Related file tracking
+ * - Environment state management
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev follow
+ * ai-dev follow --save my-context
+ * ai-dev follow --load my-context
+ * ```
+ */
+
 import { Command } from 'commander';
 import { loadConfig } from '../utils/config.js';
 import chalk from 'chalk';

@@ -1,3 +1,25 @@
+/**
+ * Workflow Management Command
+ * 
+ * Manages development workflows and tasks. Helps coordinate development
+ * activities, track progress, and maintain project context across
+ * different development phases.
+ * 
+ * Features:
+ * - Task creation and tracking
+ * - Workflow state management
+ * - Git integration
+ * - Progress monitoring
+ * - Context preservation
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev workflow create
+ * ai-dev workflow switch
+ * ai-dev workflow list
+ * ```
+ */
+
 import { Command } from 'commander';
 import chalk from 'chalk';
 import inquirer from 'inquirer';

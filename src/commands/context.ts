@@ -1,3 +1,24 @@
+/**
+ * Context Management Command
+ * 
+ * Manages the AI development context. Helps maintain alignment between
+ * human and AI by tracking project state, goals, and progress.
+ * 
+ * Features:
+ * - Context loading/saving
+ * - Goal tracking
+ * - Progress monitoring
+ * - State synchronization
+ * - History management
+ * 
+ * Usage:
+ * ```bash
+ * ai-dev context
+ * ai-dev context --save
+ * ai-dev context --load
+ * ```
+ */
+
 import { Command } from 'commander';
 import { join } from 'path';
 import { readFile } from 'fs/promises';
