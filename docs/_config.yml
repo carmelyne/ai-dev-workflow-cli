@@ -1,0 +1,23 @@
+title: AI Dev Workflow CLI
+description: A framework for structured human-AI collaboration
+theme: just-the-docs
+
+url: https://carmelyne.github.io/ai-dev-workflow-cli
+
+aux_links:
+  Repository: https://github.com/carmelyne/ai-dev-workflow-cli
+
+# Color scheme
+color_scheme: dark
+
+# Enable search
+search_enabled: true
+
+# Navigation
+nav_external_links:
+  - title: GitHub Repository
+    url: https://github.com/carmelyne/ai-dev-workflow-cli
+    hide_icon: false
+
+# Footer content
+footer_content: "Made with ❤️ by a Human + Windsurf + Claude + ChatGPT"
