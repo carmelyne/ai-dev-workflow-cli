@@ -1,140 +1,170 @@
 # AI Dev Workflow CLI
 
+> **Important**: Start by reading [PRINCIPLES.md](PRINCIPLES.md) to understand our documentation-first approach and core values.
+
 <div align="center">
 
 [![GitHub license](https://img.shields.io/github/license/carmelyne/ai-dev-workflow-cli)](https://github.com/carmelyne/ai-dev-workflow-cli/blob/main/LICENSE)
 [![npm version](https://img.shields.io/npm/v/ai-dev-workflow-cli)](https://www.npmjs.com/package/ai-dev-workflow-cli)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/carmelyne/ai-dev-workflow-cli/blob/main/CONTRIBUTING.md)
+[![Status](https://img.shields.io/badge/status-pre--alpha-orange)](https://github.com/carmelyne/ai-dev-workflow-cli)
 
 </div>
 
-Transform your development workflow with AI-powered guidance. This framework-agnostic CLI tool seamlessly integrates AI assistance into your development process, helping you write better code, faster.
+> ⚠️ **Project Status: Pre-Alpha**
+>
+> This project is in active early development. While the architecture and documentation are being established, the implementation is not yet ready for production use. We're following a documentation-first approach to ensure solid foundations.
+>
+> - ✅ Architecture & Documentation: In Progress
+> - 🚧 Core Implementation: Early Development
+> - 📅 Expected Alpha Release: Q1 2025
+>
+> Star/Watch this repository to stay updated on our progress!
 
-> 🚀 Built with [Codeium's Windsurf](https://codeium.com/windsurf), the world's first agentic IDE that enables true AI-human collaboration.
+A framework-agnostic CLI tool that provides consistent, user-controlled AI behavior through tenets, directives, and workflow templates.
 
-## ✨ Highlights
+## Core Concepts
 
-- 🧠 **AI Development Framework** - A structured way for anyone to develop their work alongside AI, maintaining context through tenets and tracking
-- 🎯 **Universal AI Workflow** - Transform any creative or analytical process into a clear AI-assisted workflow with guiding tenets
-- 🔄 **AI-Human Collaboration** - Track progress and maintain shared context between human and AI through structured files and stages
-- 📝 **Adaptive Interface** - Commands like `story`, `explore`, and `review` create a consistent interface between you and AI for any type of work
-- ⚡ **Continuous Context** - Keep your AI assistant aligned with your goals and progress through the `context` command
+- **Tenets & Directives** - Control WHAT and HOW the AI operates
+- **Context Persistence** - Maintain AI behavior consistency
+- **User Control** - Full customization of AI behavior
+- **Documentation First** - Clear specifications before implementation
 
-> 💡 While this framework is designed for any AI-assisted workflow, we're starting with software development as our first template. The principles of structured collaboration and context management proven in development can be applied to any creative or analytical process.
+## System Integration
 
-## 📚 Documentation
+```
+System Level
+└── /etc/ai/
+    ├── tenets/
+    └── directives/
 
-**[View the full documentation](https://carmelyne.github.io/ai-dev-workflow-cli)** for:
-- Detailed guides and tutorials
-- Best practices and patterns
-- Command reference
-- Configuration options
-- Advanced features
+Application Level
+└── ${APP_PATH}/ai/
+    ├── workflows/
+    └── preferences/
 
-## 🚀 Quick Start
+User Level
+└── ~/.config/ai/
+    ├── custom/
+    └── preferences/
+```
 
-### Installation
+## Quick Start
 
 ```bash
-# Using npm
+# Install globally
 npm install -g ai-dev-workflow-cli
 
-# Or using npx (no installation required)
-npx ai-dev-workflow-cli init
-```
-
-### Basic Usage
-
-```bash
-# Initialize AI workflow in your project
+# Initialize in your project
 ai-dev init
 
-# Create a new feature with AI guidance
-ai-dev story create
+# Load a workflow template
+ai-dev workflow load developer
 
-# Get implementation guidance
-ai-dev implement feature-name
+# Check current AI context
+ai-dev context show
 
-# AI-assisted code review
-ai-dev review
+# Refresh AI memory
+ai-dev refresh-memory
 ```
 
-## 🛠 Key Features
-
-### AI-Guided Workflows
-
-The CLI provides intelligent guidance at every step:
-- User story creation and refinement
-- Implementation strategy and patterns
-- Code review and best practices
-- Documentation assistance
-
-### Smart Templates
-
-Automatically generate and adapt:
-- User story templates
-- PR templates
-- Documentation templates
-- Code patterns
-
-### Project Type Support
-
-Specialized patterns for:
-- Web Applications
-- Libraries/Packages
-- CLI Tools
-- APIs
-- And more...
-
-## ⚙️ Configuration
-
-The tool maintains its configuration in the `.ai` directory:
+## Documentation Structure
 
 ```
-.ai/
-├── config.yaml     # Core configuration
-├── patterns/       # Reusable patterns
-└── templates/      # Story/PR templates
+docs/
+├── ARCHITECTURE.md     # System design
+├── core/
+│   ├── TENETS_AND_REFRESH.md
+│   └── USER_CONTROL.md
+├── integration/        # OS/App integration
+└── workflows/         # Template guides
 ```
 
-Configuration options include:
-- AI provider settings
-- Custom templates
-- Project-specific patterns
-- Team preferences
+## Key Features
 
-## 🧑‍💻 Development
+### 1. Context Management
+- File-based configuration via `/PATH`
+- Hierarchical settings loading
+- Context persistence across sessions
 
-```bash
-# Install dependencies
-npm install
+### 2. User Empowerment
+- Custom workflow templates
+- Behavior preferences
+- Privacy controls
 
-# Run in development mode
-npm run dev
+### 3. Universal Integration
+- OS-level integration
+- Application support
+- Cross-platform compatibility
 
-# Build for production
-npm run build
+## Configuration
 
-# Run tests
-npm test
+```yaml
+# Example user preferences
+~/.config/ai/preferences.yaml
+
+preferences:
+  style:
+    tone: professional
+    verbosity: concise
+  
+  workflow:
+    auto_refresh: true
+    context_retention: high
 ```
 
-## 🤝 Contributing
+## Development Status
 
-Contributions are welcome! See our [Contributing Guide](CONTRIBUTING.md) for details on:
-- Setting up the development environment
-- Coding standards
-- Submitting pull requests
-- Feature requests and bug reports
+### Current Phase: Pre-Alpha
 
-## 📄 License
+We are currently in the early stages of development, following our documentation-first principle:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+#### Completed
+- ✅ Core architecture design
+- ✅ Documentation structure
+- ✅ Tenets and directives system
+- ✅ User control specification
 
----
+#### In Progress
+- 🚧 Base implementation
+- 🚧 Template system
+- 🚧 Context management
+- 🚧 Integration guides
 
-<div align="center">
-Made with ❤️ by a Human + Windsurf + Claude + ChatGPT
-<br/>
-<sub>(A real-world example of human-AI collaboration!)</sub>
-</div>
+#### Roadmap
+- 📅 Q1 2025: Alpha Release
+  - Basic CLI functionality
+  - Core workflow templates
+  - Local context management
+- 📅 Q3 2025: Beta Release
+  - Full feature set
+  - Multiple workflow types
+  - Integration APIs
+- 📅 Q1 2026: 1.0 Release
+  - Production ready
+  - Enterprise features
+  - Extended ecosystem
+
+### Getting Involved
+
+While we're not yet ready for production use, you can:
+1. Star the repository to show interest
+2. Watch for updates
+3. Provide feedback on the architecture
+4. Suggest features or use cases
+
+## Contributing
+
+1. Read [PRINCIPLES.md](PRINCIPLES.md) first
+2. Follow documentation-first approach
+3. See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Learn More
+
+- [Architecture Overview](docs/ARCHITECTURE.md)
+- [Core Concepts](docs/core/TENETS_AND_REFRESH.md)
+- [User Control](docs/core/USER_CONTROL.md)
+
+## License
+
+MIT - See [LICENSE](LICENSE) for details
