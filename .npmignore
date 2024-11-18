@@ -1,0 +1,31 @@
+# Source
+src/
+tests/
+docs-site/
+
+# Development files
+.github/
+.vscode/
+.idea/
+*.log
+*.tsbuildinfo
+
+# Git
+.git/
+.gitignore
+
+# CI
+.travis.yml
+.gitlab-ci.yml
+.github/workflows/
+
+# Development config
+.eslintrc*
+.prettierrc*
+jest.config.*
+tsconfig.json
+
+# Misc
+.DS_Store
+*.swp
+*.swo

@@ -1,5 +1,21 @@
 # AI Dev Workflow CLI - Development Roadmap
 
+## Progress 🚀
+- [IN PROGRESS] Testing Infrastructure - Setting up Jest and test coverage
+- [IN PROGRESS] CI/CD Pipeline - GitHub Actions setup
+- [COMPLETED] Initial CLI setup and basic functionality
+- [COMPLETED] Story creation with AI analysis
+- Planning team collaboration features
+- Planning dependency analysis system
+
+## Blockers ⚠️
+- [HIGH] Missing test coverage for AI analysis functions
+- [HIGH] CI/CD pipeline documentation needed
+- [MEDIUM] Performance issues in template processing
+- [MEDIUM] Need team feedback on collaboration features
+- Pending decision on ML model selection
+- Documentation gaps in architecture guide
+
 ## Next Up 🎯
 1. **Testing Infrastructure**
    - [ ] Set up Jest testing framework

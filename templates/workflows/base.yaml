@@ -1,0 +1,31 @@
+name: base
+description: Base workflow template that all other workflows must extend
+tags:
+  - core
+  - base
+
+steps:
+  0_context_persistence:
+    description: Maintain context between workflow sessions
+    guidelines:
+      - Save current workflow state
+      - Track progress and decisions
+      - Preserve important notes and references
+      - Clean up stale context when appropriate
+    files:
+      - .context/state.yaml
+      - .context/notes.md
+      - .context/decisions.md
+    
+configuration:
+  context:
+    state_file: string
+    notes_file: string
+    decisions_file: string
+    cleanup:
+      type: enum
+      options: [manual, automatic]
+      default: manual
+    retention_days:
+      type: integer
+      default: 30

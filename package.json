@@ -2,18 +2,32 @@
   "name": "ai-dev-workflow-cli",
   "version": "0.2.0",
   "description": "Framework-agnostic AI-guided development workflow tool",
+  "type": "module",
   "main": "dist/index.js",
   "bin": {
     "ai-dev": "./dist/cli.js"
   },
+  "files": [
+    "dist",
+    "templates",
+    ".ai",
+    "docs/guides"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/cli.js",
-    "dev": "ts-node src/cli.ts",
+    "dev": "node --loader ts-node/esm src/cli.ts",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "prepare": "npm run build",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "keywords": [
     "ai",
