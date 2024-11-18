@@ -1,96 +1,53 @@
-/**
- * Project Initialization Command
- * 
- * Initializes a new project with AI-guided development workflow configuration.
- * Creates necessary directory structure, configuration files, and templates
- * for AI-assisted development.
- * 
- * Features:
- * - Creates .ai directory with configuration
- * - Sets up project-specific templates
- * - Configures initial development workflow
- * - Initializes git integration (if needed)
- * 
- * Usage:
- * ```bash
- * ai-dev init
- * ai-dev init --type webapp
- * ```
- */
-
-import fs from 'fs';
-import path from 'path';
+import { join } from 'path';
+import { mkdir, cp } from 'fs/promises';
 import inquirer from 'inquirer';
-import yaml from 'yaml';
-import { copyTemplate } from '../utils/files.js';
+import chalk from 'chalk';
 
-interface InitOptions {
-  type?: string;
-}
+export async function init() {
+  try {
+    // Create .ai directory structure
+    const aiDir = join(process.cwd(), '.ai');
+    const aiSystemDir = join(aiDir, 'ai');
+    const aiAgentDir = join(aiDir, 'ai-agent');
+    const humanAgentDir = join(aiDir, 'human-agent');
+    
+    console.log(chalk.blue('\nCreating AI configuration directories...\n'));
+    
+    // Create all main directories
+    await mkdir(aiDir, { recursive: true });
+    await mkdir(aiSystemDir, { recursive: true });
+    await mkdir(aiAgentDir, { recursive: true });
+    await mkdir(humanAgentDir, { recursive: true });
+    await mkdir(join(humanAgentDir, 'roles'), { recursive: true });
 
-export async function init(options: InitOptions) {
-  // Get project info
-  const answers = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'name',
-      message: 'Project name:',
-      default: path.basename(process.cwd())
-    },
-    {
+    // Copy AI system and agent templates
+    const aiTemplatesDir = join(__dirname, '../../ai-config/ai');
+    const aiAgentTemplatesDir = join(__dirname, '../../ai-config/ai-agent');
+    
+    console.log(chalk.blue('Copying AI configuration templates...\n'));
+    await cp(aiTemplatesDir, aiSystemDir, { recursive: true });
+    await cp(aiAgentTemplatesDir, aiAgentDir, { recursive: true });
+    
+    // Prompt for human agent role
+    const { role } = await inquirer.prompt([{
       type: 'list',
-      name: 'type',
-      message: 'Project type:',
-      choices: ['webapp', 'library', 'cli'],
-      default: options.type
-    },
-    {
-      type: 'input',
-      name: 'description',
-      message: 'Project description:'
-    }
-  ]);
-
-  // Create .ai directory
-  const aiDir = path.join(process.cwd(), '.ai');
-  if (!fs.existsSync(aiDir)) {
-    fs.mkdirSync(aiDir);
-    fs.mkdirSync(path.join(aiDir, 'patterns'));
-    fs.mkdirSync(path.join(aiDir, 'templates'));
+      name: 'role',
+      message: 'What is your role?',
+      choices: ['developer', 'researcher', 'writer']
+    }]);
+    
+    // Copy selected role configuration
+    const roleTemplate = join(__dirname, `../../ai-config/human-agent/roles/${role}.yaml`);
+    const roleTarget = join(humanAgentDir, 'roles', `${role}.yaml`);
+    await cp(roleTemplate, roleTarget);
+    
+    console.log(chalk.green('\nProject initialized successfully!'));
+    console.log(chalk.gray('AI configuration files copied to .ai/ai/'));
+    console.log(chalk.gray('AI agent workspace created in .ai/ai-agent/'));
+    console.log(chalk.gray(`Human agent role '${role}' configured in .ai/human-agent/`));
+    
+  } catch (error) {
+    console.error(chalk.red('Error: Failed to initialize project.'));
+    console.error(error);
   }
-
-  // Copy and customize config template
-  const configTemplate = path.join(__dirname, '../../templates/config.yaml');
-  const configContent = fs.readFileSync(configTemplate, 'utf8');
-  const config = yaml.parse(configContent);
-
-  // Update with project info
-  config.project = {
-    ...config.project,
-    name: answers.name,
-    type: answers.type,
-    description: answers.description
-  };
-
-  // Write customized config
-  fs.writeFileSync(
-    path.join(aiDir, 'config.yaml'),
-    yaml.stringify(config)
-  );
-
-  // Copy templates based on project type
-  copyTemplate('patterns', answers.type, aiDir);
-  copyTemplate('templates', answers.type, aiDir);
-
-  console.log(`
-✨ AI workflow initialized!
-
-Created .ai directory with:
-  - config.yaml: Core AI guidance
-  - patterns/: Reusable patterns
-  - templates/: Story/PR templates
-
-Start developing with:
-  $ ai-workflow guide feature
-  `);
 }
