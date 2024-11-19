@@ -1,6 +1,14 @@
 import { Command } from 'commander';
 import { loadConfig } from '../utils/config.js';
 import chalk from 'chalk';
+import type { Workflow } from '../types/workflow.js';
+import { isWorkflow } from '../types/workflow.js';
+
+interface ConfigWithWorkflow {
+  development_workflow: {
+    [key: string]: unknown;
+  };
+}
 
 export function createFollowCommand() {
   const command = new Command('follow');
@@ -11,18 +19,25 @@ export function createFollowCommand() {
     .argument('<feature>', 'Feature name')
     .action(async (type: string, feature: string) => {
       try {
-        const config = await loadConfig();
+        const config = await loadConfig() as ConfigWithWorkflow;
         if (!config) {
           console.error(chalk.red('Failed to load config from .ai/config.yaml'));
           return;
         }
 
-        const workflow = config.development_workflow[type];
+        const workflowData = config.development_workflow[type];
         
-        if (!workflow) {
+        if (!workflowData) {
           console.error(chalk.red(`Custom workflow type '${type}' not found in .ai/config.yaml. Available types: basic, advanced`));
           return;
         }
+
+        if (!isWorkflow(workflowData)) {
+          console.error(chalk.red(`Invalid workflow format for type '${type}'`));
+          return;
+        }
+
+        const workflow: Workflow = workflowData;
 
         console.log(chalk.blue(`\n📋 Following custom ${type} workflow for: ${feature}\n`));
         console.log(chalk.yellow('AI will combine this workflow with built-in capabilities:\n'));
@@ -33,8 +48,8 @@ export function createFollowCommand() {
         }
 
         console.log(chalk.green('\nCustom workflow loaded. AI will now implement this feature using both custom workflow and built-in capabilities.\n'));
-      } catch (error) {
-        console.error(chalk.red('Error loading custom workflow:'), error);
+      } catch (error: any) {
+        console.error(chalk.red('Error loading custom workflow:'), error.message);
       }
     });
 

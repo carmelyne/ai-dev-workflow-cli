@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
-interface AICommandOptions {
+export interface AICommandOptions {
   content?: string;
   type?: string;
   depth?: string;
@@ -9,7 +9,7 @@ interface AICommandOptions {
   [key: string]: any;
 }
 
-interface AIAnalysisIssue {
+export interface AIAnalysisIssue {
   severity: 'info' | 'warning' | 'error';
   line?: number;
   description: string;
@@ -17,13 +17,13 @@ interface AIAnalysisIssue {
   autoFixable: boolean;
 }
 
-interface AIAnalysisMetrics {
+export interface AIAnalysisMetrics {
   complexity: number;
   maintainability: number;
   testability: number;
 }
 
-interface AIAnalysisResult {
+export interface AIAnalysisResult {
   issues: AIAnalysisIssue[];
   metrics?: AIAnalysisMetrics;
   fixes?: Array<{
@@ -69,7 +69,7 @@ export async function executeAICommand(command: string, options: AICommandOption
     }
   } catch (error) {
     console.error('Error executing AI command:', error);
-    throw error; // Re-throw instead of exiting to maintain proper error handling
+    throw error;
   }
 }
 
@@ -138,12 +138,6 @@ async function handleImplementation(context: any): Promise<void> {
   const { options } = context;
   console.log('🤖 AI Implementation Guide');
   console.log('\nAnalyzing project structure and generating implementation plan...');
-  
-  // Here we would integrate with Codeium to:
-  // 1. Analyze the codebase
-  // 2. Generate implementation steps
-  // 3. Provide code snippets and examples
-  // 4. Suggest test cases
 }
 
 async function handleCodeReview(context: any): Promise<AIAnalysisResult> {
@@ -152,7 +146,6 @@ async function handleCodeReview(context: any): Promise<AIAnalysisResult> {
   console.log('\nAnalyzing code...');
   
   // Mock AI review response for now
-  // This would be replaced with actual Codeium API integration
   const analysis: AIAnalysisResult = {
     issues: [
       {
@@ -180,12 +173,12 @@ async function handleCodeReview(context: any): Promise<AIAnalysisResult> {
   return analysis;
 }
 
-async function getRelevantFiles(projectRoot: string, command: string, options: AICommandOptions): Promise<string[]> {
+export async function getRelevantFiles(projectRoot: string, command: string, options: AICommandOptions): Promise<string[]> {
   // Implementation to get relevant files based on the command and options
   return [];
 }
 
-function sanitizeFilename(filename: string): string {
+export function sanitizeFilename(filename: string): string {
   return filename
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -193,18 +186,15 @@ function sanitizeFilename(filename: string): string {
 }
 
 // AI Analysis Functions
-async function analyzeBusinessValue(description: string, context: any): Promise<string> {
-  // TODO: Implement AI analysis of business value
+export async function analyzeBusinessValue(description: string, context: any): Promise<string> {
   return '[Placeholder for AI business value analysis]';
 }
 
-async function generateAcceptanceCriteria(description: string, context: any): Promise<string> {
-  // TODO: Implement AI generation of acceptance criteria
+export async function generateAcceptanceCriteria(description: string, context: any): Promise<string> {
   return '- [ ] Generated Criterion 1\n- [ ] Generated Criterion 2';
 }
 
-async function analyzeTechnicalImpact(description: string, context: any): Promise<any> {
-  // TODO: Implement AI analysis of technical impact
+export async function analyzeTechnicalImpact(description: string, context: any): Promise<any> {
   return {
     architecture: '[Placeholder for architecture impact]',
     dependencies: '[Placeholder for dependencies]',
@@ -212,42 +202,34 @@ async function analyzeTechnicalImpact(description: string, context: any): Promis
   };
 }
 
-async function breakdownTasks(description: string, context: any): Promise<string> {
-  // TODO: Implement AI task breakdown
+export async function breakdownTasks(description: string, context: any): Promise<string> {
   return '- [ ] Generated Task 1 (Complexity: Medium)';
 }
 
-async function assessRisks(description: string, context: any): Promise<string> {
-  // TODO: Implement AI risk assessment
+export async function assessRisks(description: string, context: any): Promise<string> {
   return '- Risk: [AI identified risk]\n  - Mitigation: [AI suggested mitigation]';
 }
 
-async function generateTestScenarios(description: string, context: any): Promise<string> {
-  // TODO: Implement AI test scenario generation
+export async function generateTestScenarios(description: string, context: any): Promise<string> {
   return '- [ ] Generated Test Scenario 1';
 }
 
-async function identifyDocumentation(description: string, context: any): Promise<string> {
-  // TODO: Implement AI documentation requirements analysis
+export async function identifyDocumentation(description: string, context: any): Promise<string> {
   return '- [ ] Generated Documentation Requirement 1';
 }
 
-async function estimateComplexity(description: string, context: any): Promise<string> {
-  // TODO: Implement AI complexity estimation
+export async function estimateComplexity(description: string, context: any): Promise<string> {
   return 'Medium';
 }
 
-async function estimateTimeline(description: string, context: any): Promise<string> {
-  // TODO: Implement AI timeline estimation
+export async function estimateTimeline(description: string, context: any): Promise<string> {
   return '2-3 days';
 }
 
-async function findRelatedStories(description: string, context: any): Promise<string> {
-  // TODO: Implement AI story relationship analysis
+export async function findRelatedStories(description: string, context: any): Promise<string> {
   return '- Related Story 1: [Description]';
 }
 
-async function getProjectContext(): Promise<any> {
-  // TODO: Implement getting project context
+export async function getProjectContext(): Promise<any> {
   return {};
 }

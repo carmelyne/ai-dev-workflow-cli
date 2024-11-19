@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
 import { loadConfig, getProjectConfig } from '../../utils/config.js';
-import { loadAIContext } from '../../utils/context.js';
+import { loadContext } from '../../utils/context.js';
 import { executeAICommand } from '../../utils/ai.js';
 
 interface ReviewOptions {
@@ -59,7 +59,7 @@ export class CodeReviewCommand {
     console.log('🔍 Starting AI Code Review...\n');
 
     // Load AI context and config
-    await loadAIContext();
+    await loadContext();
     const config = await getProjectConfig();
 
     // Get files to review

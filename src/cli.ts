@@ -8,7 +8,7 @@ import { ReviewCommand } from './commands/review.js';
 import { CodeCommand } from './commands/code.js';
 import { createWorkflowCommand } from './commands/workflow.js';
 import { createFollowCommand } from './commands/follow.js';
-import { loadAIContext } from './utils/context.js';
+import { loadContext } from './utils/context.js';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';

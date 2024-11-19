@@ -1,180 +1,185 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import { loadConfig } from '../utils/config.js';
+import { join } from 'path';
+import { readdir } from 'fs/promises';
+import { loadYamlFile } from '../utils/yaml.js';
 import { executeAICommand } from '../utils/ai.js';
-import { createWorkflowStep } from './workflow/step.js';
-import { createWorkflowModuleCommands } from './workflow/modules.js';
+import { fileURLToPath } from 'url';
+import type { Workflow, WorkflowStep } from '../types/workflow.js';
+import { isWorkflow } from '../types/workflow.js';
 
-interface WorkflowStep {
-  type: string;
-  status: string;
-  title: string;
-  description?: string;
-  command?: string;
-  args?: string[];
-  guidelines?: string[];
-  files?: string[];
-  steps?: string[];
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
+async function loadWorkflow(type: string): Promise<Workflow> {
+  const workflowPath = join(__dirname, '../../templates/workflows', `${type}.yaml`);
+  try {
+    const content = await loadYamlFile(workflowPath);
+    if (!content || !isWorkflow(content)) {
+      throw new Error(`Invalid workflow format for '${type}'`);
+    }
+    return content;
+  } catch (error: any) {
+    console.error(chalk.red(`Error loading workflow: ${error.message}`));
+    process.exit(1);
+  }
 }
 
-interface WorkflowConfig {
-  description: string;
-  steps: Record<string, WorkflowStep>;
+async function listWorkflows(): Promise<void> {
+  const workflowsDir = join(__dirname, '../../templates/workflows');
+  try {
+    const files = (await readdir(workflowsDir))
+      .filter(file => file.endsWith('.yaml'))
+      .map(file => file.replace('.yaml', ''));
+    
+    console.log(chalk.blue('\nAvailable workflows:'));
+    files.forEach(file => {
+      console.log(chalk.yellow(`- ${file}`));
+    });
+    console.log();
+  } catch (error: any) {
+    console.error(chalk.red(`Error listing workflows: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+async function showWorkflow(type: string): Promise<void> {
+  try {
+    const workflow = await loadWorkflow(type);
+    
+    console.log(chalk.blue(`\n📋 ${type} workflow: ${workflow.description}\n`));
+    
+    let stepNumber = 1;
+    for (const [stepKey, step] of Object.entries<WorkflowStep>(workflow.steps)) {
+      console.log(chalk.green(`Step ${stepNumber} (${stepKey}):`));
+      console.log(chalk.yellow(`Step ${stepNumber}: ${step.description}`));
+      
+      if (step.command) {
+        console.log(chalk.cyan(`  Command template: ${step.command}`));
+      }
+      
+      if (step.guidelines?.length) {
+        console.log(chalk.magenta('  Guidelines:'));
+        step.guidelines.forEach((guideline: string) => {
+          console.log(chalk.magenta(`  - ${guideline}`));
+        });
+      }
+      
+      if (step.files?.length) {
+        console.log(chalk.cyan('  Files:'));
+        step.files.forEach((file: string) => {
+          console.log(chalk.cyan(`  - ${file}`));
+        });
+      }
+      
+      stepNumber++;
+    }
+    console.log();
+  } catch (error: any) {
+    console.error(chalk.red(`Error showing workflow: ${error.message}`));
+    process.exit(1);
+  }
+}
+
+async function executeWorkflow(type: string): Promise<void> {
+  try {
+    const workflow = await loadWorkflow(type);
+    
+    console.log(chalk.blue(`\n📋 Starting ${type} workflow: ${workflow.description}\n`));
+    
+    let stepNumber = 1;
+    for (const [stepKey, step] of Object.entries<WorkflowStep>(workflow.steps)) {
+      console.log(chalk.green(`Step ${stepNumber} (${stepKey}):`));
+      console.log(chalk.yellow(`\nStep ${stepNumber}: ${step.description}`));
+      
+      if (step.command) {
+        const { execute } = await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'execute',
+            message: `Enter values for command: ${step.command}\n(Press Enter to skip)`
+          }
+        ]);
+        
+        if (execute) {
+          try {
+            await executeAICommand(step.command, execute.split(' '));
+          } catch (error: any) {
+            console.error(chalk.red(`Error executing command: ${error.message}`));
+          }
+        }
+      }
+      
+      if (step.guidelines?.length) {
+        console.log(chalk.magenta('\nGuidelines:'));
+        step.guidelines.forEach((guideline: string) => {
+          console.log(chalk.magenta(`- ${guideline}`));
+        });
+        console.log();
+      }
+      
+      if (step.files?.length) {
+        console.log(chalk.cyan('\nFiles to review:'));
+        step.files.forEach((file: string) => {
+          console.log(chalk.cyan(`- ${file}`));
+        });
+        console.log();
+      }
+      
+      if (step.steps?.length) {
+        console.log(chalk.yellow('\nSub-steps:'));
+        step.steps.forEach((substep: string) => {
+          console.log(chalk.yellow(`- ${substep}`));
+        });
+        console.log();
+      }
+      
+      const { continue: shouldContinue } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'continue',
+          message: 'Continue to next step?',
+          default: true
+        }
+      ]);
+      
+      if (!shouldContinue) {
+        console.log(chalk.yellow('\nWorkflow paused. Resume when ready.\n'));
+        break;
+      }
+      
+      stepNumber++;
+    }
+    
+    console.log(chalk.green('\nWorkflow completed! 🎉\n'));
+  } catch (error: any) {
+    console.error(chalk.red(`Error executing workflow: ${error.message}`));
+    process.exit(1);
+  }
 }
 
 export function createWorkflowCommand(): Command {
-  const command = new Command('workflow');
-  
-  // Add module management commands
-  createWorkflowModuleCommands(command);
-  
-  // Add step management command
-  command.addCommand(createWorkflowStep());
-  
-  // Original workflow following command
-  command
-    .command('follow')
-    .description('Follow a defined workflow process')
-    .argument('[type]', 'Workflow type (basic or advanced)')
-    .action(async (type?: string) => {
+  const command = new Command('workflow')
+    .description('Manage development workflows')
+    .argument('[type]', 'Type of workflow to run')
+    .option('-l, --list', 'List available workflows')
+    .option('-s, --show', 'Show workflow steps without executing')
+    .action(async (type: string, options: { list?: boolean; show?: boolean }) => {
       try {
-        if (!type) {
-          await runInteractiveMode();
-          return;
+        if (options.list) {
+          await listWorkflows();
+        } else if (options.show && type) {
+          await showWorkflow(type);
+        } else if (type) {
+          await executeWorkflow(type);
+        } else {
+          await listWorkflows();
         }
-
-        // If type provided, display workflow for AI to follow
-        const config = await loadConfig();
-        if (!config?.development_workflow) {
-          throw new Error('No workflow configuration found. Please run init first.');
-        }
-
-        const workflow = config.development_workflow[type];
-        if (!workflow) {
-          console.error(chalk.red(`Workflow type '${type}' not found. Available types: ${Object.keys(config.development_workflow).join(', ')}`));
-          return;
-        }
-
-        console.log(chalk.blue(`\n📋 ${type} workflow: ${workflow.description}\n`));
-        console.log(chalk.yellow('This workflow is for AI guidance. The AI will follow these steps:\n'));
-
-        // Display steps for AI to follow
-        for (const [stepKey, step] of Object.entries(workflow.steps)) {
-          const stepNumber = stepKey.split('_')[0];
-          console.log(chalk.yellow(`Step ${stepNumber}: ${step.description}`));
-          
-          if (step.command) {
-            console.log(chalk.cyan(`  Command template: ${step.command}`));
-          }
-          if (step.guidelines?.length) {
-            console.log(chalk.cyan('  Guidelines:'));
-            step.guidelines.forEach((guideline: string) => {
-              console.log(chalk.cyan(`    • ${guideline}`));
-            });
-          }
-          if (step.files?.length) {
-            console.log(chalk.cyan('  Files:'));
-            step.files.forEach((file: string) => {
-              console.log(chalk.cyan(`    • ${file}`));
-            });
-          }
-          console.log(); // Empty line between steps
-        }
-
-        console.log(chalk.green('\nWorkflow loaded. The AI will now follow these steps.\n'));
-      } catch (error) {
-        console.error(chalk.red('Error loading workflow:'), error instanceof Error ? error.message : String(error));
+      } catch (error: any) {
+        console.error(chalk.red(`Error: ${error.message}`));
         process.exit(1);
       }
     });
 
   return command;
-}
-
-// Interactive mode for when users run 'ai-dev workflow' without args
-async function runInteractiveMode(): Promise<void> {
-  try {
-    const config = await loadConfig();
-    if (!config?.development_workflow) {
-      throw new Error('No workflow configuration found. Please run init first.');
-    }
-
-    const { type } = await inquirer.prompt({
-      type: 'list',
-      name: 'type',
-      message: 'Select workflow type:',
-      choices: Object.keys(config.development_workflow)
-    });
-
-    const workflow = config.development_workflow[type];
-    if (!workflow) {
-      throw new Error(`Workflow type '${type}' not found`);
-    }
-
-    console.log(chalk.blue(`\n📋 Starting ${type} workflow: ${workflow.description}\n`));
-
-    // Execute each step in sequence
-    for (const [stepKey, step] of Object.entries(workflow.steps)) {
-      const stepNumber = stepKey.split('_')[0];
-      console.log(chalk.yellow(`\nStep ${stepNumber}: ${step.description}`));
-
-      if (step.command) {
-        const { execute } = await inquirer.prompt({
-          type: 'input',
-          name: 'execute',
-          message: `Enter values for command: ${step.command}\n(Press Enter to skip)`,
-        });
-
-        if (execute) {
-          try {
-            await executeAICommand(step.command, execute.split(' '));
-          } catch (error) {
-            console.error(chalk.red(`Error executing command: ${error instanceof Error ? error.message : String(error)}`));
-          }
-        }
-      }
-
-      // Show guidelines if any
-      if (step.guidelines?.length) {
-        console.log(chalk.cyan('\nGuidelines:'));
-        step.guidelines.forEach((guideline: string) => {
-          console.log(chalk.cyan(`• ${guideline}`));
-        });
-      }
-
-      // Show files to modify if any
-      if (step.files?.length) {
-        console.log(chalk.cyan('\nFiles to modify:'));
-        step.files.forEach((file: string) => {
-          console.log(chalk.cyan(`• ${file}`));
-        });
-      }
-
-      // Show substeps if any
-      if (step.steps?.length) {
-        console.log(chalk.cyan('\nSubsteps:'));
-        step.steps.forEach((substep: string) => {
-          console.log(chalk.cyan(`• ${substep}`));
-        });
-      }
-
-      const { completed } = await inquirer.prompt({
-        type: 'confirm',
-        name: 'completed',
-        message: 'Have you completed this step?',
-        default: false,
-      });
-
-      if (!completed) {
-        console.log(chalk.yellow('\nPlease complete this step before continuing.'));
-        break;
-      }
-    }
-
-    console.log(chalk.green('\n✨ Workflow completed!\n'));
-  } catch (error) {
-    console.error(chalk.red('Error in interactive mode:'), error instanceof Error ? error.message : String(error));
-    process.exit(1);
-  }
 }
