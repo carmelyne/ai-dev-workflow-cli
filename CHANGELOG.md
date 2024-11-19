@@ -1,32 +1,33 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [0.1.0] - 2023-11-14
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+### Changed
+- Simplified project structure and dependencies
+- Moved to ES modules with `type: module` in package.json
+- Streamlined TypeScript configuration
+- Reduced build and start scripts to essentials
 
-## [0.1.0] - 2024-01-09
+### Added
+- New initialization workflow with AI configuration directories
+- Support for multiple agent configurations (AI system, AI agent, human agent)
+- Role-based configuration for human agents
+- Template copying functionality
 
-### 🚀 Features
-- Initial release of the AI Dev Workflow CLI
-- AI-guided development workflow support
-- Standardized user story templates
-- Project-type specific guidance
-- Automated PR templates
-- Command-line interface with commands:
-  - `init`: Initialize AI workflow in a project
-  - `story`: Create and manage user stories
-  - `implement`: Get AI guidance for implementation
-  - `review`: Get AI code review and suggestions
-  - `explore`: Explore project files with AI insights
+### Removed
+- Complex testing infrastructure
+- Unused dependencies (js-yaml, yaml, glob, luxon)
+- Legacy configuration templates
+- Unnecessary compiler options
 
-### 📝 Documentation
-- Added comprehensive README
-- Added workflow configuration templates
-- Added initial documentation structure
+### Dependencies
+- Added: chalk@5.3.0 for console output
+- Added: commander@11.0.0 for CLI structure
+- Added: inquirer@9.2.10 for interactive prompts
+- Removed multiple legacy dependencies
 
-### 🔨 Internal
-- Set up TypeScript project structure
-- Implemented core CLI functionality
-- Added configuration management
-- Set up development workflow
+### Development
+- Simplified TypeScript configuration
+- Removed Jest testing setup
+- Streamlined build process
+- Basic gitignore rules
